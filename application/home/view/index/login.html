@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	{include file="public/resources"}
+	<body>
+		<div class="fixed-all-web">
+			<form class="fixed-middle" method="post" action="{:url('post_https/checkLogin')}" onsubmit="javascript:return form_submit(this);">
+				<span>用户编号</span>
+				<input type="text" name="uid">
+				<span>密码</span>
+				<input type="password" name="password">
+				<input type="submit" value="登 陆">
+			</form>
+		</div>
+		{include file="public/warning-label"}
+	</body>
+</html>
+<script>
+	// 表单提交成功回调
+	function callback_submit(data) {
+		if (!data.res) {
+			warning_error(data.msg);
+		} else {
+			location.reload();
+		}
+	}
+</script>

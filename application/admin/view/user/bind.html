@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+	{include file="public/resources"}
+	<body>
+		<form>
+			<select>
+				{foreach $data.admins as $admin}
+				<option value="{$admin.id}">{$admin->name}</option>
+				{/foreach}
+			</select>
+		</form>
+	</body>
+</html>

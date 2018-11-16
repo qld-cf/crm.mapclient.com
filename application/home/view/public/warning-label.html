@@ -1,0 +1,38 @@
+<!--信息提示模块-->
+<div id="warning-label" data-success="1" class="fixed-middle" onclick="warning_hide();" title="关闭"></div>
+<script>
+	function warning_error(text) {
+		// 失败提示
+		$('#warning-label').attr('data-success', '0');
+		// 添加提示内容
+		warning_text(text);
+		// 显示提示框
+		warning_show();
+	}
+
+	function warning_success(text) {
+		// 成功提示
+		$('#warning-label').attr('data-success', '1');
+		// 添加提示内容
+		warning_text(text);
+		// 显示提示框
+		warning_show();
+		// 3秒钟后关闭
+		setTimeout(function() {
+			warning_hide();
+		}, 5000);
+	}
+
+	function warning_text(text) {
+		$('#warning-label').html(text);
+	}
+
+	function warning_show() {
+		$('#warning-label').show();
+	}
+
+	function warning_hide() {
+		$('#warning-label').hide();
+	}
+</script>
+<!--信息提示模块 end-->

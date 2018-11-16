@@ -1,0 +1,104 @@
+<div id="catalog-list">
+	<div id="slidebar-inner">
+		<a id="logo-name" href="http://www.zcallr.com" target="__blank">&copy; 智呼通信</a>
+		<a id="logo-big" class="logo" href="./"><img src="__IMAGE__/logo-big.png"></a>
+		<a id="logo-small" class="logo" href="./"><img src="__IMAGE__/logo-small.png"></a>
+		<div id="slidebar-fold" onclick="catalog_fold();">
+			<i class="fa fa-navicon fa-rotate-90"></i>
+			<i class="fa fa-navicon"></i>
+		</div>
+		<div id="catalogs">
+			{foreach $data.catalog as $arr}
+				{if condition="$arr->childs"}
+				<div data-catalog-id="{$arr->id}" class="catalog-title" onclick="catalog_title(this);">
+					<i class="fa fa-caret-right fa-fw"></i>
+					<span>{$arr->name}</span>
+				</div>
+				<ul id="catalog-{$arr->id}" class="catalog-trans">
+					{foreach $arr->childs as $child}
+					<li data-alias="{$child->alias}" data-url="{$child->url}" onclick="catalog_show(this);">
+						<i class="{$child->icon}"></i>
+						<span>{$child->name}</span>
+					</li>
+					{/foreach}
+				</ul>
+				{/if}
+			{/foreach}
+		</div>
+		<div id="catalog-float-text"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	// 折叠/展开左侧目录列表
+	function catalog_fold() {
+		// 折叠状态
+		if ($('#catalog-list').attr('data-fold') == '1') {
+			$('#catalog-list').removeAttr('data-fold');
+			$('#window-area').removeAttr('data-fold');
+
+		// 展开状态
+		} else {
+			$('#catalog-list').attr('data-fold', '1');
+			$('#window-area').attr('data-fold', '1');
+		}
+	}
+
+	// 折叠/展开目录页
+	function catalog_title(obj) {
+		catalogId = $(obj).attr('data-catalog-id');
+		// 目录页折叠状态
+		if ($(obj).find('.fa').hasClass('fa-caret-right')) {
+			$(obj).find('.fa').removeClass('fa-caret-right').addClass('fa-caret-down');
+			$('#catalog-' + catalogId).slideDown('fast');
+
+		// 目录页展开状态
+		} else {
+			$(obj).find('.fa').removeClass('fa-caret-down').addClass('fa-caret-right');
+			$('#catalog-' + catalogId).slideUp('fast');
+		}
+	}
+
+	// 鼠标移入/出已缩放的左侧目录列表
+	$('#catalog-list .catalog-title, #catalog-list .catalog-trans>li').hover(function() {
+		if ($('#catalog-list').attr('data-fold') != '1') return;
+		mtext = $(this).find('span').text();
+		mtop = $(this).offset().top;
+		$('#catalog-float-text').text(mtext).css('top', mtop).show();
+	}, function() {
+		$('#catalog-float-text').hide();
+	});
+
+	// 显示所选的目录页
+	function catalog_show(obj) {
+		alias = $(obj).attr('data-alias');
+
+		$('#window-topbar .active').removeClass('active');
+		$('#window-panel .active').removeClass('active');
+
+		// 如果该选项已存在于标签栏
+		if ($('#window-panel #iframe-' + alias)[0]) {
+			$('#window-topbar #iframe-topbar-' + alias).addClass('active');
+			$('#window-panel #iframe-' + alias).addClass('active');
+
+		// 该选项未存在于标签栏
+		} else {
+			// 标签名
+			text = $(obj).find('span').text();
+			// 链接
+			url = $(obj).attr('data-url');
+
+			// 标签栏标签
+			topbarStr = '<li data-alias="' + alias + '" id="iframe-topbar-' + alias + '" class="active">';
+			topbarStr += '<i class="fa fa-fw fa-refresh" onclick="window_bar_refresh(this);"></i> ' + text + ' <i class="fa fa-fw fa-remove"></i>';
+			topbarStr += '</li>';
+
+			// 标签栏窗口
+			iframeStr = '<iframe id="iframe-' + alias + '" class="active" src="' + url + '" scrolling="auto" frameborder="0"></iframe>';
+
+			$('#window-topbar').append(topbarStr);
+			$('#window-panel').append(iframeStr);
+		}
+
+		slide_topbar_visible();
+	}
+</script>

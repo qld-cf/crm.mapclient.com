@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	{include file="public/resources"}
+	<body>
+		<!--地图区域-->
+		<div id="map-area" style="width: 100%;height: 800px;"></div>
+		<!--地图区域 end-->
+
+		{include file="public/warning-label"}
+
+		<!--socket-->
+		<script>
+			// 当前管理平台用户有权限看到的gps客户端
+			var gpsJson = {};
+
+			// 当前管理平台用户信息
+			var myJson = {
+				"src"	: "admin",
+				// 其他信息...
+			};
+
+			// 当前时间戳
+			var timestamp = new Date().getTime();
+
+			// 获取token所需的参数
+			var tokenJson = {
+				"type"		: "conn",
+				"data"		: myJson,
+				"timestamp"	: timestamp,
+			};
+
+			// 获取连接socket服务器的token
+			$.ajax({
+				url 		: "{:url('post_https/getToken')}",
+				type 		: "post",
+				data 		: JSON.stringify(tokenJson),
+				contentType	: "application/json",
+				dataType	: "json",
+				async		: false,
+				success : function(jsonStr) {
+					json = JSON.parse(jsonStr);
+
+					// 获取到token，保存在tokenJson里
+					if (json.res) {
+						tokenJson.token = json.msg;
+
+					// 获取失败，显示提示信息
+					} else {
+						warning_error(json.msg);
+					}
+				}
+			});
+
+			// 初始化websocket
+			var ws = new WebSocket("{if $data.envs['ssl.is_ssl'] == 1}wss{else/}ws{/if}://{$data.envs['workerman.server_url']}:{$data.envs['workerman.server_port']}");
+
+			// 连接服务器
+			ws.onopen = function() {
+				// 发送验证信息
+		    	ws.send(JSON.stringify(tokenJson));
+		    };
+
+		    // 收到服务器信息
+		    ws.onmessage = function(e) {
+		    	data = JSON.parse(e.data);
+
+		    	// 服务器响应验证成功
+		    	if (data['type'] == 'checked') {
+		    		// 成功提示
+		    		warning_success(data['msg']);
+		    	}
+		    };
+
+		    // 服务器方向关闭
+			ws.onclose = function(e) {
+				warning_error('websocket服务器关闭');
+			};
+
+			// 服务器出错
+			ws.onerror = function(e) {
+				warning_error('websocket服务器错误');
+			};
+
+			// 心跳检测
+		    setInterval(function() {
+		    	ws.send(JSON.stringify({"type" : "heart"}));
+		    }, ({$data.envs['workerman.heartbeat_time']} - 10) * 1000);
+
+		    // 通过发送请求来获取当前gps状态
+		    function get_gps_status() {
+	    		ws.send(JSON.stringify());
+		    }
+		</script>
+		<!--socket end-->
+
+		{if $data.envs['map.map_api'] == 'baidu'}
+			{include file="mapapi-script/baidu-api"}
+		{/if}
+
+		{if $data.envs['map.map_api'] == 'gaode'}
+			{include file="mapapi-script/gaode-api"}
+		{/if}
+	</body>
+</html>

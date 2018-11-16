@@ -1,0 +1,389 @@
+ /*========== 公共样式（放在最前面，部门样式可以被后面的特有样式覆盖） ===========*/
+
+	/* 初始化 */
+	html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video, textarea, button {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+		background: transparent;
+		list-style: none;
+		font-style: normal;
+		font-size: 12px;
+	}
+
+	/* fixed定位居于父元素正中 */
+	.fixed-middle {
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		margin: auto;
+	}
+
+	/* 覆盖整个页面 */
+	.fixed-all-web {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+	}
+
+	/* a标签样式 */
+	a, a:link, a:active, a:visited, a:hover {
+		text-decoration: none;
+		outline: none;
+	}
+
+/* ========== 公共样式：end ===========*/
+
+
+
+
+
+
+/* ========== 特有样式 ==========*/
+
+/* 【信息提示框】 */
+	/* warning label 信息提示框 */
+	#warning-label {
+		height: 25px;
+		line-height: 25px;
+		width: 350px;
+		text-align: center;
+		color: #f0f0f0;
+		/*--重置fixed-middle样式--*/
+		top: 30px;
+		bottom: unset;
+		/*--warning label 默认提示失败--*/
+		background-color: #d55;
+		cursor: pointer;
+		display: none;
+	}
+
+	/* warning label 提示成功 */
+	#warning-label[data-success="1"] {
+		background-color: #6b6!important;
+	}
+/* 【信息提示框】 end */
+
+/* 【后台管理左侧目录】 */
+	/* 外部，遮挡y轴下拉条 */
+	#catalog-list {
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		width: 180px;
+		height: 100%;
+		overflow-x: hidden;
+		background-color: #333744;
+		color: #f0f0f0;
+		user-select: none;
+	}
+
+	/* 内部，含y轴下拉条 */
+	#slidebar-inner {
+		width: 198px;
+		height: 100%;
+		overflow-x: hidden;
+	}
+
+	/* 公司名 */
+	#catalog-list #logo-name {
+		position: absolute;
+		left: 0px;
+		bottom: 20px;
+		width: 100%;
+		color: #666;
+		text-align: center;
+		font-size: 12px;
+	}
+
+	/* 公司logo */
+	#catalog-list .logo {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: 100%;
+		height: 53px;
+		text-align: center;
+		cursor: pointer;
+		background-color: #373d41;
+		z-index: 10;
+		display: block;
+		outline: none;
+	}
+	#catalog-list .logo:hover {
+		background-color: #2a2f32;
+		transition: background-color 0.4s;
+	}
+	#catalog-list #logo-big {
+		display: block;
+	}
+	#catalog-list #logo-small {
+		display: none;
+	}
+
+	/* 折叠按钮 */
+	#catalog-list #slidebar-fold {
+		position: absolute;
+		top: 53px;
+		left: 0px;
+		width: 100%;
+		height: 30px;
+		text-align: center;
+		background-color: #4A5064;
+		cursor: pointer;
+		z-index: 10;
+	}
+
+	/* 折叠按钮图标 */
+	#catalog-list #slidebar-fold i {
+		line-height: 30px;
+		color: #aeb9c2;
+	}
+	#catalog-list #slidebar-fold:hover i {
+		color: #f0f0f0;
+		transition: color 0.4s;
+	}
+	#catalog-list #slidebar-fold i:first-child {
+		display: inline-block;
+	}
+	#catalog-list #slidebar-fold i:last-child {
+		display: none;
+	}
+
+	/* 目录列表 */
+	#catalogs {
+		width: 180px;
+		margin-top: 83px;
+	}
+	#catalogs .catalog-title {
+		position: relative;
+		width: 180px;
+		height: 40px;
+		line-height: 40px;
+		background-color: #42485B;
+		padding: 0 10px;
+		font-size: 13px;
+		cursor: pointer;
+	}
+	#catalogs .catalog-title>i {
+		margin-right: 10px;
+	}
+	#catalogs .catalog-title:hover {
+		background-color: #00C1DE;
+		transition: background-color 0.4s;
+	}
+	#catalogs .catalog-trans {
+		width: 180px;
+		display: none;
+	}
+	#catalogs .catalog-trans li {
+		width: 180px;
+		height: 36px;
+		line-height: 36px;
+		background-color: #333744;
+		padding-left: 20px;
+		padding-right: 10px;
+		cursor: pointer;
+	}
+	#catalogs .catalog-trans li:hover {
+		background-color: #4A5064;
+		transition: background-color 0.4s;
+	}
+	#catalogs .catalog-trans li>i {
+		margin-right: 13px;
+		color: #aeb9c2;
+		font-size: 12px;
+	}
+	#catalogs .catalog-trans li:hover>i {
+		color: #f0f0f0;
+		transition: color 0.4s;
+	}
+
+	/* 折叠状态 */
+	#catalog-list[data-fold="1"] {
+		width: 50px;
+		text-align: center;
+	}
+	#catalog-list[data-fold="1"] #logo-name {
+		display: none;
+	}
+	#catalog-list[data-fold="1"] #logo-big {
+		display: none;
+	}
+	#catalog-list[data-fold="1"] #logo-small {
+		display: block;
+	}
+	#catalog-list[data-fold="1"] #slidebar-fold i:first-child {
+		display: none;
+	}
+	#catalog-list[data-fold="1"] #slidebar-fold i:last-child {
+		display: inline-block;
+	}
+	#catalog-list[data-fold="1"] #catalogs span {
+		display: none;
+	}
+	#catalog-list[data-fold="1"] .catalog-title, #catalog-list[data-fold="1"] .catalog-trans, #catalog-list[data-fold="1"] .catalog-trans li {
+		padding: 0;
+		width: 50px;
+	}
+	#catalog-list[data-fold="1"] .catalog-title>i, #catalog-list[data-fold="1"] .catalog-trans li>i {
+		margin: 0px;
+	}
+	
+	/* 折叠状态文字浮动 */
+	#catalog-float-text {
+		position: fixed;
+		left: 60px;
+		height: 40px;
+		padding: 0px 8px;
+		background-color: #546478;
+		color: #f0f0f0;
+		font-size: 12px;
+		line-height: 40px;
+		display: none;
+	}
+	#catalog-float-text:before {
+		position: absolute;
+		top: 50%;
+		left: -14px;
+		width: 0px;
+		height: 0px;
+		content: "\00a0";
+		display: block;
+		border-style: solid;
+		border-width: 7px;
+		border-color: transparent #546478 transparent transparent;
+		margin-top: -7px;
+	}
+/* 【后台管理左侧目录】 end */
+	
+/* 【后台管理窗口标题】 */
+	#window-area {
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		width: 100%;
+		height: 100%;
+		padding: 15px 10px 5px 190px;
+		user-select: none;
+		background-color: #f3f3f5;
+	}
+
+	/* 窗口标签左右箭头 */
+	#window-area .arrow {
+		position: absolute;
+		top: 15px;
+		width: 10px;
+		height: 30px;
+		line-height: 30px;
+		text-align: center;
+		cursor: pointer;
+		color: #00C1DE;
+		background-color: #f3f3f5;
+		font-size: 12px;
+	}
+	#window-area .arrow-left {
+		margin-left: -10px;
+	}
+	#window-area .arrow-right {
+		right: 0px;
+	}
+
+	/* 窗口标签全部关闭按钮 */
+	#window-all-close-bar {
+		position: absolute;
+		top: 15px;
+		right: 10px;
+		width: 80px;
+		height: 30px;
+		line-height: 30px;
+		text-align: center;
+		cursor: pointer;
+		color: #f0f0f0;
+		background-color: #42485B;
+		font-size: 13px;
+		z-index: 10;
+	}
+	#window-all-close-bar:hover {
+		background-color: #00C1DE;
+		transition: background-color 0.4s;
+	}
+	
+	/* 窗口头部标签栏 */
+	#window-topbar {
+		height: 30px;
+		width: 10000px;
+		border-bottom: 1px solid #ccc;
+		padding: 0px 80px 0px 0px;
+		color: #666;
+		transition: margin-left 0.4s;
+		background-color: #f3f3f5;
+	}
+	#window-topbar li {
+		line-height: 28px;
+		height: 30px;
+		display: block;
+		float: left;
+		border: 1px solid #ccc;
+		cursor: pointer;
+		font-size: 13px;
+		border-right-width: 0px;
+		min-width: 80px;
+		padding: 0 10px;
+		text-align: center;
+	}
+	#window-topbar li i {
+		color: #999;
+		transition: color 0.4s;
+	}
+	#window-topbar li i:hover {
+		color: #546478;
+	}
+	#window-topbar li:last-child {
+		border-right-width: 1px;
+		border-top-right-radius: 3px;
+	}
+	#window-topbar .active {
+		border-bottom-color: #f3f3f5;
+		color: #42485B;
+		border-top-color: #42485B;
+	}
+	#window-panel {
+		position: absolute;
+		top: 50px;
+		bottom: 5px;
+		right: 10px;
+		left: 190px;
+	}
+	#window-panel #window-panel-shade {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		display: none;
+		z-index: 30;
+	}
+	#window-panel iframe {
+		width: 100%;
+		height: 100%;
+		display: none;
+		background-color: #fff;
+	}
+	#window-panel .active {
+		display: block;
+	}
+
+	#window-area[data-fold="1"] {
+		padding-left: 60px;
+	}
+	#window-area[data-fold="1"] #window-panel {
+		left: 60px;
+	}
+/* 【后台管理窗口标题】 end */
+
+/* ========== 特有样式：end ==========*/

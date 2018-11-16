@@ -1,0 +1,120 @@
+<div id="window-area">
+	<span class="arrow arrow-left" onclick="window_arrow_left();"><i class="fa fa-angle-left"></i></span>
+	<span class="arrow arrow-right" onclick="window_arrow_right();"><i class="fa fa-angle-right"></i></span>
+	<span id="window-all-close-bar" onclick="window_close_all();">关闭全部</span>
+
+	<div id="window-topbar">
+		<li data-alias="idx" id="iframe-topbar-idx" class="active"><i class="fa fa-refresh fa-fw"></i> 首页</li>
+	</div>
+	<div id="window-panel">
+		<div id="window-panel-shade"></div>
+		<iframe id="iframe-idx" class="active" scrolling="auto" frameborder="0"></iframe>
+	</div>
+</div>
+<script>
+	// 后台管理窗口标签栏点击右箭头切换标签页
+	function window_arrow_right() {
+		// 如果右侧标签存在
+		if ($('#window-topbar .active').next('li').length != 0) {
+			$('#window-topbar .active').removeClass('active').next('li').addClass('active');
+			// 将现在正在选中的标签设为活跃
+			change_iframe_active($('#window-topbar .active'));
+		}
+
+		slide_topbar_visible();
+	}
+
+	// 后台管理窗口标签栏点击左箭头切换标签页
+	function window_arrow_left() {
+		// 如果左侧标签存在
+		if ($('#window-topbar .active').prev('li').length != 0) {
+			$('#window-topbar .active').removeClass('active').prev('li').addClass('active');
+			// 将现在正在选中的标签设为活跃
+			change_iframe_active($('#window-topbar .active'));
+		}
+
+		slide_topbar_visible();
+	}
+
+	// 切换控制管理界面iframe框架显示或隐藏
+	function change_iframe_active(e) {
+		alias = e.attr('data-alias');
+		// 将原来活跃的标签设为非活跃状态
+		$('#window-panel .active').removeClass('active');
+		// 将活跃标签对应的窗口设为活跃状态
+		$('#window-panel #iframe-' + alias).addClass('active');
+	}
+
+	// 控制管理界面点击全部关闭按钮
+	function window_close_all() {
+		$('#window-topbar li:not(:first-child)').remove();
+		$('#window-topbar li').addClass('active');
+		$('#window-panel iframe:not(#iframe-idx)').remove();
+		$('#window-panel #iframe-idx').addClass('active');
+		$('#window-topbar').css('margin-left', '0px');
+	}
+
+	// 控制管理界面框架导航标签卡滑动定位至活跃处
+	function slide_topbar_visible() {
+		iframeWidth = $('#window-area').width();
+		iframeClosebarWidth = $('#window-all-close-bar').width();
+		visiblebarToScreenleft = parseFloat($('#window-area').css('padding-left').replace(/[^\d.]/g, ''));
+		firstTabToScreenleft = $('#window-topbar li:first-child').position().left;
+		activeToScreenleft = $('#window-topbar .active').position().left;
+		topbarActiveWidth = parseFloat($('#window-topbar .active').css('width').replace(/[^\d.]/g, ''));
+		// 标签卡可视宽度
+		topbarVisibleWidth = iframeWidth - iframeClosebarWidth;
+		// 标签卡左侧不可视宽度
+		topbarUnVisibleWidth = visiblebarToScreenleft - firstTabToScreenleft;
+		// 相对于标签卡最左侧的距离
+		activeToBarleft = activeToScreenleft - firstTabToScreenleft;
+
+		if ( activeToBarleft + topbarActiveWidth - topbarUnVisibleWidth >= topbarVisibleWidth) {
+			beyondBarleftWidth = activeToBarleft + topbarActiveWidth - topbarVisibleWidth;
+			$('#window-topbar').css('margin-left', '-' + beyondBarleftWidth + 'px');
+		}
+
+		if (topbarUnVisibleWidth >= activeToBarleft) {
+			beyondBarleftWidth = topbarUnVisibleWidth - activeToBarleft;
+			$('#window-topbar').css('margin-left', (beyondBarleftWidth - topbarUnVisibleWidth) + 'px');
+		}
+	}
+
+	// 控制管理界面点击标签选项卡切换标签页
+	$('#window-area').delegate('#window-topbar li', 'click', function() {
+		$('#window-topbar .active').removeClass('active');
+		$(this).addClass('active');
+		change_iframe_active($(this));
+		slide_topbar_visible();
+	});
+
+	// 控制管理界面点击标签页关闭按钮
+	$('#window-area').delegate('#window-topbar li .fa-remove', 'click', function(event) {
+		event.stopPropagation();
+
+		if ($(this).parent('li').hasClass('active')) {
+			activeAlias = '';
+
+			if ($(this).parent('li').next('li').length > 0) {
+				activeAlias = $(this).parent('li').next('li').attr('data-alias');
+				$(this).parent('li').next('li').addClass('active');
+			} else if ($(this).parent('li').prev('li').length > 0) {
+				activeAlias = $(this).parent('li').prev('li').attr('data-alias');
+				$(this).parent('li').prev('li').addClass('active');
+			}
+
+			$('#window-panel #iframe-' + activeAlias).addClass('active');
+		}
+
+		alias = $(this).parent('li').attr('data-alias');
+		$(this).parent('li').remove();
+		$('#window-panel #iframe-' + alias).remove();
+		slide_topbar_visible();
+	});
+
+	// 控制管理界面点击标签页刷新按钮
+	function window_bar_refresh(obj) {
+		alias = $(obj).parent('li').attr('data-alias');
+		$('#window-panel #iframe-' + alias).attr('src', $('#window-panel #iframe-' + alias).attr('src'));
+	}
+</script>
