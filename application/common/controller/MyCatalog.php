@@ -12,7 +12,7 @@ class MyCatalog {
      * ------------------------------------
      */
 	public function getCatalog($filter = []) {
-		return ModelCatalog::all(function($query, $filter = []) {
+		return ModelCatalog::all(function($query) use ($filter) {
 			$query->where($filter)->order('priority', 'desc');
 		});
 	}

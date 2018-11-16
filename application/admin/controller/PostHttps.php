@@ -4,7 +4,6 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Loader;
 use think\Request;
-use app\common\model\Admin as ModelAdmin;
 
 class PostHttps extends Controller {
     // 提示信息类对象
@@ -47,21 +46,15 @@ class PostHttps extends Controller {
         // 拼装筛选条件
         $filter = [
             'uid' => $this->_data['uid'],
-            'password' => $c_mylogin->getPassword($this->_data['password']),
+            'password' => $this->_data['password'],
         ];
 
-        // 尝试获取登录信息
-        $admin_info = ModelAdmin::get($filter);
-
-        // 检查密码是否正确
-        if ($admin_info) {
-            // 生成session
-            session('admin_info', $admin_info);
+        if ($c_mylogin->setIn($filter)) {
             $res = $this->_c_mylanguage->setReturn('', true);
         } else {
             $res = $this->_c_mylanguage->setReturn($this->_c_mylanguage->_login_error);
         }
-
+        
         return $res;
     }
 }

@@ -2,7 +2,7 @@
 namespace app\admin\controller;
 
 use think\Controller;
-use app\common\model\User as ModelUser;
+use think\Loader;
 
 class User extends Controller {
     // 后台管理用户信息
@@ -43,11 +43,10 @@ class User extends Controller {
      * ------------------------------------
      */
     public function bind() {
-        $data = [
-            'gps'       => ModelUser::all(['src' => 'gps']),     // gps用户列表
-            'admins'    => ModelUser::all(['src' => 'admin']),   // 平台管理员用户列表
-        ];
+        $c_myuser = Loader::controller('common/MyUser');
+
         
+
         $this->assign('data', $data);
         return $this->fetch('user/bind');
     }

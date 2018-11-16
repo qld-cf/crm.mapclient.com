@@ -4,7 +4,6 @@ namespace app\home\controller;
 use think\Controller;
 use think\Loader;
 use think\Request;
-use app\common\model\User as ModelUser;
 
 class PostHttps extends Controller {
     // 提示信息类对象
@@ -70,16 +69,10 @@ class PostHttps extends Controller {
         // 拼装筛选条件
         $filter = [
             'uid' => $this->_data['uid'],
-            'password' => $c_mylogin->getPassword($this->_data['password']),
+            'password' => $this->_data['password'],
         ];
 
-        // 尝试获取登录信息
-        $user_info = ModelUser::get($filter);
-
-        // 检查密码是否正确
-        if ($user_info) {
-            // 生成session
-            session('user_info', $user_info);
+        if ($c_mylogin->setIn($filter, 'user')) {
             $res = $this->_c_mylanguage->setReturn('', true);
         } else {
             $res = $this->_c_mylanguage->setReturn($this->_c_mylanguage->_login_error);
